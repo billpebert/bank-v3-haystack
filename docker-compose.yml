@@ -1,0 +1,25 @@
+version: "3"
+# We used this file to run both the mysql and app in the same network
+# so you app can use mysql as a hostname instead of 127.0.0.1
+services:
+  # We have two services database and app:
+  db:
+    # Mysql Image
+    image: mysql:5.7
+
+    container_name: mysql
+    # Please adapt your .env file with database credentials
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: "true"
+      MYSQL_DATABASE: haystack
+    # Forward the ports to be accessible for debug purposes
+    ports:
+      - "9906:3306"
+  haystack:
+    image: haystack
+    container_name: haystack_web
+    depends_on:
+      - db
+    # Forward the app so it will be accessible from the http://localhost:8100/
+    ports:
+      - "8100:80"

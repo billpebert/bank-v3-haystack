@@ -1,0 +1,54 @@
+nav {
+    border-bottom: 1px solid rgba(31, 31, 31, 0.1);
+
+    .navbar-brand {
+        font-size: 24px;
+        color: $black;
+        font-weight: 600;
+
+        span {
+            color: $gray;
+            font-weight: 400;
+        }
+    }
+
+    .navbar-collapse {
+        .__navbar-link {
+            @include media-breakpoint-up(lg) {
+                gap: 14px;
+            }
+
+            .nav-link {
+                color: $black;
+
+                &.active {
+                    color: $soft-blue;
+                }
+            }
+        }
+
+        @include media-breakpoint-down(lg) {
+            margin-top: 12px;
+        }
+
+        .dropdown.userprofile {
+            .username {
+                font-weight: 600;
+                font-size: 16px;
+            }
+
+            .email {
+                font-size: 12px;
+                font-weight: 400;
+                color: $gray;
+            }
+
+            .dropdown-toggle {
+                &::after {
+                    content: url('/svgs/ic_arrow-dropdown.svg');
+                    border: none;
+                }
+            }
+        }
+    }
+}
