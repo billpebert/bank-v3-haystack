@@ -1,0 +1,67 @@
+.__transactions-table {
+    font-size: 12px;
+
+    thead {
+        border-bottom: 2px solid rgba(31, 31, 31, 0.1);
+    }
+
+    tr,
+    td,
+    th {
+        vertical-align: middle;
+    }
+
+    tbody {
+        tr:not(.table-active) {
+
+            &:hover,
+            &:focus {
+                background-color: #FAFEFE !important;
+            }
+        }
+
+        .hide-table-padding,
+        .accordion-toggle[aria-expanded="true"] {
+            background-color: #FAFEFE !important;
+        }
+    }
+
+    .table-active {
+        background-color: #F7F7F7;
+    }
+
+    .__data-transaction- {
+        &id a {
+            color: $light-blue;
+        }
+
+        &amount {
+            color: $green-light;
+        }
+    }
+
+    // Style For collapsible row
+    tr.hide-table-padding td {
+        padding: 0;
+    }
+
+    .paddingtd {
+        padding: 4.8px;
+    }
+
+    // .expand-button {
+    //     position: relative;
+    // }
+
+    // .accordion-toggle .expand-button:after {
+    //     position: absolute;
+    //     left: .75rem;
+    //     top: 50%;
+    //     transform: translate(0, -50%);
+    //     content: '-';
+    // }
+
+    // .accordion-toggle.collapsed .expand-button:after {
+    //     content: '+';
+    // }
+}

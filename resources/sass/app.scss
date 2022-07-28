@@ -18,6 +18,33 @@ body {
     background-color: $white;
 }
 
+a,
+a:hover {
+    text-decoration: none;
+}
+
+.gap- {
+    &1 {
+        gap: 4px;
+    }
+
+    &2 {
+        gap: 8px;
+    }
+
+    &3 {
+        gap: 16px;
+    }
+
+    &4 {
+        gap: 24px;
+    }
+
+    &5 {
+        gap: 48px;
+    }
+}
+
 //App Style
 @import 'components/navbar';
 @import 'components/buttons';
@@ -127,3 +154,5 @@ body {
         font-size: 16px;
     }
 }
+
+@import 'components/transactions-table';
