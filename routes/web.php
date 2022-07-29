@@ -18,8 +18,9 @@ Route::get('/', 'MainController@index')->name('main-page');
 Route::get('autosuggestion', 'MainController@autoSuggestion')->name('autosuggestion');
 Route::post('transaction', 'MainController@transaction')->name('transaction');
 Route::get('output', 'MainController@output')->name('output');
+Route::get('/transaction/edit/{id}', 'MainController@showDataTransactionShare')->name('showDataTransactionShare');
 
-Route::view('/new', 'Pages.transaction');
+Route::view('/new', 'Pages.transaction_share_new');
 
 //--------Transaction Bank----------
 Route::post('saveTransactionBank', 'MainController@saveTransactionBank')->name('saveTransactionBank');

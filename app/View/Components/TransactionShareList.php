@@ -1,6 +1,7 @@
 <?php
 
 namespace App\View\Components;
+
 use DB;
 use Illuminate\View\Component;
 
@@ -8,19 +9,19 @@ class TransactionShareList extends Component
 {
 
     /**
-	* @var string
-	*/
-	public $finishdate;
+     * @var string
+     */
+    public $finishdate;
 
     /**
-	* @var string
-	*/
-	public $startdate;
+     * @var string
+     */
+    public $startdate;
 
     /**
-	* @var string
-	*/
-	public $accounts;
+     * @var string
+     */
+    public $accounts;
 
     /**
      * Create a new component instance.
@@ -41,11 +42,14 @@ class TransactionShareList extends Component
      */
     public function render()
     {
-        
-        $transactions = DB::select('call statementtidy4(?,?,?)',array($this->startdate, $this->finishdate, $this->accounts));
-        $balanceToday = DB::select('select balancefn(?,?) as balance',array($this->accounts, now()));
-        $balanceToday = $balanceToday[0]->balance;
 
-        return view('components.transaction-share-list',['transactions'=>$transactions, 'accounts'=>$this->accounts, 'balanceToday'=>$balanceToday]);
+        $transactions = DB::select('call statementtidy4(?,?,?)', array($this->startdate, $this->finishdate, $this->accounts));
+
+        // BALANCE TODAY IS MOVED TO MainController.php
+        // $balanceToday = DB::select('select balancefn(?,?) as balance', array($this->accounts, now()));
+        // $balanceToday = $balanceToday[0]->balance;
+
+        // return view('components.transaction-share-list', ['transactions' => $transactions, 'accounts' => $this->accounts, 'balanceToday' => $balanceToday]);
+        return view('components.transaction-share-list', ['transactions' => $transactions, 'accounts' => $this->accounts]);
     }
 }

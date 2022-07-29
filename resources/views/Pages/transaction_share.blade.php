@@ -28,8 +28,8 @@
                     <div class="col">
                         <div class="form-group">
                             <label for="amountVar">Net Amount (amount actually paid/received)</label>
-                            <input type="number" class="form-control" id="amountVar" name="amountVar" min="0" step="any"
-                                required>
+                            <input type="number" class="form-control" id="amountVar" name="amountVar" min="0"
+                                step="any" required>
                         </div>
                     </div>
                 </div>
@@ -37,14 +37,15 @@
                     <div class="col">
                         <div class="form-group">
                             <label for="catVar">Gross amount</label>
-                            <input type="number" class="form-control" id="grossVar" name="grossVar" min="0" step="any">
+                            <input type="number" class="form-control" id="grossVar" name="grossVar" min="0"
+                                step="any">
                         </div>
                     </div>
                     <div class="col">
                         <div class="form-group">
                             <label for="fullCatVar">Number of shares bought/sold</label>
-                            <input type="number" class="form-control" id="numberVar" name="numberVar" required min="0"
-                                step="any">
+                            <input type="number" class="form-control" id="numberVar" name="numberVar" required
+                                min="0" step="any">
                         </div>
                     </div>
                     <div class="col">
@@ -64,8 +65,8 @@
                     <div class="col">
                         <div class="form-group">
                             <label for="chequeVar">FX rate for £1</label>
-                            <input type="number" class="form-control" id="fxVar" name="fxVar" value="1" min="0"
-                                step="any">
+                            <input type="number" class="form-control" id="fxVar" name="fxVar" value="1"
+                                min="0" step="any">
                         </div>
                     </div>
                     <div class="col">
@@ -83,7 +84,8 @@
                         <label class="custom-control-label" for="debit">Buy</label>
                     </div>
                     <div class="custom-control custom-radio custom-control-inline">
-                        <input type="radio" id="credit" value="credit" name="credDeb" checked class="custom-control-input">
+                        <input type="radio" id="credit" value="credit" name="credDeb" checked
+                            class="custom-control-input">
                         <label class="custom-control-label" for="credit">Sell</label>
                     </div>
 
@@ -100,10 +102,13 @@
         <div class="col-md-1">
         </div>
     </div>
-    <div class="row py-5">
-        <div class="col-md-12">
-            <x-transaction-share-list finishdate="{{ request()->get('finishdate') }}"
-                startdate="{{ request()->get('startdate') }}" accounts="{{ request()->get('accounts') }}" />
+
+    <div class="container-fluid">
+        <div class="row py-5">
+            <div class="col-md-12">
+                <x-transaction-share-list finishdate="{{ request()->get('finishdate') }}"
+                    startdate="{{ request()->get('startdate') }}" accounts="{{ request()->get('accounts') }}" />
+            </div>
         </div>
     </div>
 

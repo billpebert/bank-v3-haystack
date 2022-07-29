@@ -42,15 +42,21 @@ class MainController extends Controller
      */
     public function transaction(Request $request)
     {
+
+        // dd($request->accounts);
+        $accounts = $request->accounts;
         if ($request->bankShare === 'bank') {
             $currency = DB::table('accounts')
                 ->select('currency')
-                ->where('accountid', $request->accounts)
+                ->where('accountid', $accounts)
                 ->get();
 
             return view('Pages.transaction_bank', ['currency' => $currency]);
         } else {
-            return view('Pages.transaction_share');
+            $balanceToday = DB::select('select balancefn(?,?) as balance', array($accounts, now()));
+            $balanceToday = $balanceToday[0]->balance;
+            // return view('Pages.transaction_share');
+            return view('Pages.transaction_share_new', compact('balanceToday', 'accounts'));
         }
     }
 
@@ -384,6 +390,7 @@ class MainController extends Controller
             ? "NULL"
             : $request->taxVar;
 
+        $transaction['cashID'] = $request->cashID === "" ? "NULL" : $request->cashID;
 
         if ($transaction['credDeb'] === 'credit') {
             $numberDebitedVar  = $transaction['numberVar'];
@@ -413,27 +420,39 @@ class MainController extends Controller
                 $debitVar  = $fromFk;
             }
 
-            //Create transaction
-            try {
-                DB::select(
-                    "call shareupdate(
-                            '" . $transaction['dateVar'] . "', 
-                            " . $transaction['amountVar'] . ", 
-                            " . $creditVar . ",
-                            " . $debitVar . ",
-                            '" . $transaction['detailsVar'] . "',
-                            '" . $transaction['segmentVar'] . "',
-                            " . $numberCreditedVar . ",
-                            " . $numberDebitedVar . ",
-                            " . $commissionVar . ", 
-                            " . $transaction['fxVar'] . ",
-                            '" . $transaction['transactionTimeVar'] . "'
-                        )"
-                );
+            // if cashID is not null then update data
+            if ($transaction['cashID'] == null || $transaction['cashID'] == "NULL") {
+                //Create transaction
+                try {
+                    DB::select(
+                        "call shareupdate(
+                                '" . $transaction['dateVar'] . "', 
+                                " . $transaction['amountVar'] . ", 
+                                " . $creditVar . ",
+                                " . $debitVar . ",
+                                '" . $transaction['detailsVar'] . "',
+                                '" . $transaction['segmentVar'] . "',
+                                " . $numberCreditedVar . ",
+                                " . $numberDebitedVar . ",
+                                " . $commissionVar . ", 
+                                " . $transaction['fxVar'] . ",
+                                '" . $transaction['transactionTimeVar'] . "'
+                            )"
+                    );
 
-                $result = ['status' => 'success', 'message' => 'Transaction created successfull'];
-            } catch (Trowable $e) {
-                $result = ['status' => 'error', 'message' => $e];
+                    $result = ['status' => 'success', 'message' => 'Transaction created successfull'];
+                } catch (Trowable $e) {
+                    $result = ['status' => 'error', 'message' => $e];
+                }
+            } else {
+                //Update transaction
+                try {
+                    DB::table('cashbook1')->where('cashID', $transaction['cashID'])->udpate($transaction);
+
+                    $result = ['status' => 'success', 'message' => 'Transaction update success'];
+                } catch (Trowable $e) {
+                    $result = ['status' => 'error', 'message' => $e];
+                }
             }
         } else {
             //Account not found
@@ -559,6 +578,29 @@ class MainController extends Controller
             $result = ['status' => 'error', 'message' => $e->getMessage()];
         }
 
+        return response()->json($result);
+    }
+
+    /**
+     * Function: Show Data For Edit
+     * 
+     * Description: (Please add your description here.)
+     * 
+     * Return type: JSON
+     */
+    public function showDataTransactionShare(Request $request)
+    {
+        $id = $request->id;
+
+        try {
+            $data = DB::table('cashbook1')->select('*')->join('accounts', 'cashbook1.creditFk', '=', 'accounts.AccountID')->where('cashId', $id)->get();
+
+            $result = ['data' => $data, 'status' => '200', 'message' => 'Success'];
+        } catch (Trowable $e) {
+            $result = ['status' => 'error', 'message' => $e];
+        }
+
+        //dd($result);
         return response()->json($result);
     }
 }
