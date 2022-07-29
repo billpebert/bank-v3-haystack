@@ -24,6 +24,7 @@ Route::view('/new', 'Pages.transaction_share_new');
 
 //--------Transaction Bank----------
 Route::post('saveTransactionBank', 'MainController@saveTransactionBank')->name('saveTransactionBank');
+Route::put('/transaction/edit/{id}', 'MainController@updateTransactionShare')->name('updateTransactionBank');
 
 //--------Account----------
 Route::post('createAccount', 'MainController@createAccount')->name('createAccount');

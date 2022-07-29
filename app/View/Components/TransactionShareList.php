@@ -3,6 +3,7 @@
 namespace App\View\Components;
 
 use DB;
+use Illuminate\Support\Facades\DB as FacadesDB;
 use Illuminate\View\Component;
 
 class TransactionShareList extends Component
@@ -43,13 +44,16 @@ class TransactionShareList extends Component
     public function render()
     {
 
-        $transactions = DB::select('call statementtidy4(?,?,?)', array($this->startdate, $this->finishdate, $this->accounts));
+        $startDate = $this->startdate;
+        $finishDate = $this->finishdate;
+        $accounts = $this->accounts;
+        $transactions = FacadesDB::select('call statementtidy4(?,?,?)', array($startDate, $finishDate, $accounts));
 
-        // BALANCE TODAY IS MOVED TO MainController.php
+        // BALANCE TODAY IS MOVED
         // $balanceToday = DB::select('select balancefn(?,?) as balance', array($this->accounts, now()));
         // $balanceToday = $balanceToday[0]->balance;
-
         // return view('components.transaction-share-list', ['transactions' => $transactions, 'accounts' => $this->accounts, 'balanceToday' => $balanceToday]);
-        return view('components.transaction-share-list', ['transactions' => $transactions, 'accounts' => $this->accounts]);
+
+        return view('components.transaction-share-list', compact('transactions', 'startDate', 'accounts', 'finishDate'));
     }
 }

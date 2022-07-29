@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\TransactionShareRequest;
 use Couchbase\View;
 use DB;
 use Illuminate\Http\Request;
@@ -53,10 +54,8 @@ class MainController extends Controller
 
             return view('Pages.transaction_bank', ['currency' => $currency]);
         } else {
-            $balanceToday = DB::select('select balancefn(?,?) as balance', array($accounts, now()));
-            $balanceToday = $balanceToday[0]->balance;
             // return view('Pages.transaction_share');
-            return view('Pages.transaction_share_new', compact('balanceToday', 'accounts'));
+            return view('Pages.transaction_share', compact('accounts'));
         }
     }
 
@@ -390,8 +389,6 @@ class MainController extends Controller
             ? "NULL"
             : $request->taxVar;
 
-        $transaction['cashID'] = $request->cashID === "" ? "NULL" : $request->cashID;
-
         if ($transaction['credDeb'] === 'credit') {
             $numberDebitedVar  = $transaction['numberVar'];
             $numberCreditedVar = 0;
@@ -420,39 +417,27 @@ class MainController extends Controller
                 $debitVar  = $fromFk;
             }
 
-            // if cashID is not null then update data
-            if ($transaction['cashID'] == null || $transaction['cashID'] == "NULL") {
-                //Create transaction
-                try {
-                    DB::select(
-                        "call shareupdate(
-                                '" . $transaction['dateVar'] . "', 
-                                " . $transaction['amountVar'] . ", 
-                                " . $creditVar . ",
-                                " . $debitVar . ",
-                                '" . $transaction['detailsVar'] . "',
-                                '" . $transaction['segmentVar'] . "',
-                                " . $numberCreditedVar . ",
-                                " . $numberDebitedVar . ",
-                                " . $commissionVar . ", 
-                                " . $transaction['fxVar'] . ",
-                                '" . $transaction['transactionTimeVar'] . "'
-                            )"
-                    );
+            //Create transaction
+            try {
+                DB::select(
+                    "call shareupdate(
+                            '" . $transaction['dateVar'] . "', 
+                            " . $transaction['amountVar'] . ", 
+                            " . $creditVar . ",
+                            " . $debitVar . ",
+                            '" . $transaction['detailsVar'] . "',
+                            '" . $transaction['segmentVar'] . "',
+                            " . $numberCreditedVar . ",
+                            " . $numberDebitedVar . ",
+                            " . $commissionVar . ", 
+                            " . $transaction['fxVar'] . ",
+                            '" . $transaction['transactionTimeVar'] . "'
+                        )"
+                );
 
-                    $result = ['status' => 'success', 'message' => 'Transaction created successfull'];
-                } catch (Trowable $e) {
-                    $result = ['status' => 'error', 'message' => $e];
-                }
-            } else {
-                //Update transaction
-                try {
-                    DB::table('cashbook1')->where('cashID', $transaction['cashID'])->udpate($transaction);
-
-                    $result = ['status' => 'success', 'message' => 'Transaction update success'];
-                } catch (Trowable $e) {
-                    $result = ['status' => 'error', 'message' => $e];
-                }
+                $result = ['status' => 'success', 'message' => 'Transaction created successfull'];
+            } catch (Trowable $e) {
+                $result = ['status' => 'error', 'message' => $e];
             }
         } else {
             //Account not found
@@ -461,6 +446,37 @@ class MainController extends Controller
 
         //Return result
         return response()->json($result);
+    }
+
+    /**
+     * Function: Save transaction share
+     * 
+     * Description: (Please add your description here.)
+     * 
+     * Return type: JSON
+     */
+    public function updateTransactionShare(Request $request)
+    {
+        //$getData = DB::table('cashbook1')->where('cashID', $request->cashID)->first();
+        $startDate = $request->startdate;
+        $finishDate = $request->finishdate;
+        $accounts = $request->accounts;
+        $data = $request->except(['_token', '_method', 'finishDateVar', 'startDateVar', 'bankShareVar', 'cashID', 'credDeb', 'fromVar']);
+        $tb['Date'] = $data['dateVar'];
+        $tb['Amount'] = $data['amountVar'];
+        $tb['transactiontime'] = $data['transactionTimeVar'];
+        // $tb['Amount'] = $data['fromVar'];
+        $tb['commission'] = $data['amountVar'] - $data['grossVar'];
+        $tb['Numbercredited'] = $data['numberVar'];
+        $tb['Numberdebited'] = $data['numberVar'];
+        $tb['Details'] = $data['detailsVar'];
+        $tb['segment'] = $data['segmentVar'];
+        $tb['fx'] = $data['fxVar'];
+        // $tb['Amount'] = $data['credDeb'];
+        //$tb['Amount'] = $data['accountVar'];
+        DB::table('cashbook1')->where('cashID', $request->cashID)->update($tb);
+        // dd($tb);
+        return redirect()->route('transaction');
     }
 
     /**
@@ -591,16 +607,27 @@ class MainController extends Controller
     public function showDataTransactionShare(Request $request)
     {
         $id = $request->id;
+        $accounts = $request->acc;
+        $startDate = $request->sd;
+        $finishDate = $request->fd;
 
-        try {
-            $data = DB::table('cashbook1')->select('*')->join('accounts', 'cashbook1.creditFk', '=', 'accounts.AccountID')->where('cashId', $id)->get();
+        $data = DB::table('cashbook1')->select('*')->join('accounts', 'cashbook1.creditFk', '=', 'accounts.AccountID')->where('cashId', $id)->first();
 
-            $result = ['data' => $data, 'status' => '200', 'message' => 'Success'];
-        } catch (Trowable $e) {
-            $result = ['status' => 'error', 'message' => $e];
-        }
+        $data->Amount = (int) $data->Amount;
+        $data->Numbercredited = (int) $data->Numbercredited;
+        $data->Numberdebited = (int) $data->Numberdebited;
+        // dd($data->fx);
 
-        //dd($result);
-        return response()->json($result);
+        return view('Pages.transaction_share_edit', compact('data', 'accounts', 'startDate', 'finishDate'));
+
+        // try {
+        //     $data = DB::table('cashbook1')->select('*')->join('accounts', 'cashbook1.creditFk', '=', 'accounts.AccountID')->where('cashId', $id)->get();
+
+        //     $result = ['data' => $data, 'status' => '200', 'message' => 'Success'];
+        // } catch (Trowable $e) {
+        //     $result = ['status' => 'error', 'message' => $e];
+        // }
+
+        // return response()->json($result);
     }
 }

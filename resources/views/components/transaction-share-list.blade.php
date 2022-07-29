@@ -68,7 +68,8 @@
                         data-parent="#accordion1" href="#collapse{{ $key }}">
                         <th scope="row">{{ $key + 1 }}</th>
                         <td class="__data-transaction-id">
-                            <a href="javascript:void(0);" onclick="getData(this.innerHTML)">{{ $item->cashid }}</a>
+                            <a
+                                href="{{ route('showDataTransactionShare', ['id' => $item->cashid]) . '?acc=' . $accounts . '&sd=' . $startDate . '&fd=' . $finishDate }}">{{ $item->cashid }}</a>
                         </td>
                         <td>
                             {{ $item->date }}
@@ -137,44 +138,3 @@
         @slot('caption', 'Looks like there is no recent transaction addition')
     @endcomponent
 @endif
-
-
-@push('scripts')
-    <script>
-        function getData(id) {
-            'use strict'
-
-            var url = `transaction/edit/${id}`
-
-            $.ajax({
-                type: "GET",
-                url: url,
-                success: function(res) {
-                    if (res.status == 200) {
-                        var data = res.data[0]
-
-                        var numberVar = 0
-                        if (data['Numbercredited'] != 0) {
-                            numberVar = data['Numbercredited']
-                        } else if (data['Numberdebited'] != 0) {
-                            numberVar = data['Numberdebited']
-                        }
-                        //console.log(numberVar)
-                        $('input#cashID').val(data['cashID'])
-                        $('input#dateVar').val(data['Date'])
-                        $('input#transactionTimeVar').val(data['transactiontime'])
-                        $('input#fromVar').val(data['AccountName'])
-                        $('input#amountVar').val(data['Amount'])
-                        $('input#grossVar').val(data['Amount'] - data['commission'])
-                        $('input#numberVar').val(numberVar)
-                        $('input#detailsVar').val(data['Details'])
-                        $('input#segmentVar').val(data['segment'])
-                        $('input#fxVar').val(data['fx'])
-
-                        //console.log($('input#cashID').val())
-                    }
-                }
-            })
-        }
-    </script>
-@endpush

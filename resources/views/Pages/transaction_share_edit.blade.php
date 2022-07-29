@@ -16,42 +16,54 @@
                 <div class="row">
                     <div class="col-md-4 col-12 lg:p-40 lg:border-right">
                         <div class="section-title">
-                            Add Transactions
+                            Edit Transactions
                         </div>
                         <div class="section-caption">
                             Input your data transaction here
                         </div>
                         <hr>
-                        <form class="needs-validation" novalidate id="formTransaction">
-                            <input name="_token" type="hidden" value="{{ csrf_token() }}" />
+                        <form class="needs-validation" novalidate id="formTransaction"
+                            action="{{ route('updateTransactionBank', request()->id) }}" method="POST">
+                            @csrf
+                            @method('PUT')
+                            {{-- <input name="_token" type="hidden" value="{{ csrf_token() }}" /> --}}
                             <div class="form-group">
                                 <label for="dateVar">Date</label>
-                                <input type="date" class="form-control" id="dateVar" name="dateVar" required>
+                                <input type="date" class="form-control" id="dateVar" name="dateVar"
+                                    value="{{ $data->Date }}" required>
                             </div>
                             <div class="form-group">
                                 <label for="transactionTimeVar">Transaction Time</label>
                                 <input type="input" class="form-control" id="transactionTimeVar" name="transactionTimeVar"
-                                    value="00:00:00">
+                                    value="{{ $data->transactiontime }}">
                             </div>
                             <div class="form-group">
                                 <label for="fromVar">Company Name</label>
                                 <input type="input" class="form-control autosuggestion" autocomplete="off" id="fromVar"
-                                    name="fromVar" data-entry="" data-account="" required>
+                                    name="fromVar" value="{{ $data->AccountName }}" data-entry="" data-account="" required>
                             </div>
                             <div class="form-group">
                                 <label for="amountVar" class="max-w-max">Net Amount (amount actually paid/received)</label>
                                 <input type="number" class="form-control" id="amountVar" name="amountVar" min="0"
-                                    step="any" required>
+                                    step="any" value="{{ $data->Amount }}" required>
                             </div>
                             <div class="form-group">
                                 <label for="catVar">Gross amount</label>
                                 <input type="number" class="form-control" id="grossVar" name="grossVar" min="0"
-                                    step="any">
+                                    step="any" value="{{ $data->Amount - $data->commission }}">
                             </div>
                             <div class="form-group">
+                                @php
+                                    $numberVar = 0;
+                                    if ($data->Numbercredited != 0) {
+                                        $numberVar = $data->Numbercredited;
+                                    } elseif ($data->Numberdebited != 0) {
+                                        $numberVar = $data->Numberdebited;
+                                    }
+                                @endphp
                                 <label for="fullCatVar">Number of shares bought/sold</label>
                                 <input type="number" class="form-control" id="numberVar" name="numberVar" required
-                                    min="0" step="any">
+                                    min="0" step="any" value="{{ $numberVar }}">
                             </div>
                             <div class="form-group">
                                 <label for="detailsVar">Details</label>
@@ -59,12 +71,13 @@
                             </div>
                             <div class="form-group">
                                 <label for="segmentVar">Segment</label>
-                                <input type="input" class="form-control" id="segmentVar" name="segmentVar">
+                                <input type="input" class="form-control" id="segmentVar" name="segmentVar"
+                                    value="{{ $data->Details }}">
                             </div>
                             <div class="form-group">
                                 <label for="chequeVar">FX rate for £1</label>
                                 <input type="number" class="form-control" id="fxVar" name="fxVar" value="1"
-                                    min="0" step="any">
+                                    min="0" step="any" value="{{ $data->fx }}">
                             </div>
                             <div class="form-group">
                                 <div class="custom-control custom-radio custom-control-inline">
@@ -80,12 +93,11 @@
                             </div>
 
                             {{-- Hidden Inputs --}}
-                            <input name="finishDateVar" type="hidden" value="{{ request()->get('finishdate') }}" />
-                            <input name="startDateVar" type="hidden" value="{{ request()->get('startdate') }}" />
-                            <input name="accountVar" type="hidden" value="{{ request()->get('accounts') }}" />
+                            <input name="finishDateVar" type="hidden" value="{{ $finishDate }}" />
+                            <input name="startDateVar" type="hidden" value="{{ $startDate }}" />
+                            <input name="accountVar" type="hidden" value="{{ $accounts }}" />
                             <input name="bankShareVar" type="hidden" value="{{ request()->get('bankshare') }}" />
-                            {{-- cashID for update data only --}}
-                            <input name="cashID" id="cashID" type="hidden" />
+                            <input name="cashID" id="cashID" value="{{ $data->cashID }}" type="hidden" />
 
                             <div class="d-flex justify-content-end">
                                 <button type="submit" class="btn btn-primary">Submit</button>
@@ -94,19 +106,11 @@
                     </div>
                     <div class="col-md-8 col-12 lg:p-40">
                         <div class="statistics d-flex">
-                            <div class="card max-w-max p-3">
-                                <div class="d-flex align-items-center">
-                                    <img src="{{ asset('svgs/ic-credit-card.svg') }}" alt="">
-                                    <span class="ml-3 card-title mb-0">Balance today</span>
-                                </div>
-                                <div class="stat-value">
-                                    {{ $balanceToday }}
-                                </div>
-                            </div>
+                            <x-card-balance-today account="{{ $accounts }}" />
                         </div>
 
-                        <x-transaction-share-list finishdate="{{ request()->get('finishdate') }}"
-                            startdate="{{ request()->get('startdate') }}" accounts="{{ $accounts }}" />
+                        <x-transaction-share-list finishdate="{{ $finishDate }}" startdate="{{ $startDate }}"
+                            accounts="{{ $accounts }}" />
 
                     </div>
 
@@ -115,14 +119,7 @@
         </div>
 
         {{-- Modal --}}
-        <div class="modal fade" id="createCompanyModal" tabindex="-1" role="dialog"
-            aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content" id="modalContent">
-
-                </div>
-            </div>
-        </div>
+        @include('components.modal-create-company')
     </div>
 
 
@@ -144,8 +141,8 @@
             };
             var as_xml = new bsn.AutoSuggest($this.attr("id"), options);
         });
-
-        (function() {
+    </script>
+    {{-- (function() {
             'use strict';
             window.addEventListener('load', function() {
                 var forms = document.getElementsByClassName('needs-validation');
@@ -158,16 +155,16 @@
                             event.preventDefault();
                             var formData = $('#formTransaction').serialize();
                             var url =
-                                "{{ action('MainController@saveTransactionShare') }}";
+                                "{{ action('MainController@updateTransactionShare') }}";
                             var inputCashId = $('input#cashID').val();
-                            console.log(inputCashId)
+                            //console.log(inputCashId)
                             $.ajax({
-                                type: inputCashId.length != '' ? "PUT" : "POST",
+                                type: "PUT",
                                 url: url,
                                 data: $('form').serialize(),
                                 success: function(msg) {
                                     if (msg.status == 'success') {
-                                        //location.reload();
+                                        location.reload();
                                     } else if (msg.status == 'notFound') {
                                         var url =
                                             "{{ action('MainController@createCompany') }}";
@@ -200,6 +197,5 @@
                     }, false);
                 });
             }, false);
-        })();
-    </script>
+        })(); --}}
 @endpush
