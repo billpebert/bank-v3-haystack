@@ -24,13 +24,13 @@ Route::view('/new', 'Pages.transaction_share_new');
 
 //--------Transaction Bank----------
 Route::post('saveTransactionBank', 'MainController@saveTransactionBank')->name('saveTransactionBank');
-Route::put('/transaction/edit/{id}', 'MainController@updateTransactionShare')->name('updateTransactionBank');
 
 //--------Account----------
 Route::post('createAccount', 'MainController@createAccount')->name('createAccount');
 Route::post('saveAccount', 'MainController@saveAccount')->name('saveAccount');
 
 //--------Transaction Share----------
+Route::put('/transaction/edit/{id}', 'MainController@updateTransactionShare')->name('updateTransactionBank');
 Route::post('saveTransactionShare', 'MainController@saveTransactionShare')->name('saveTransactionShare');
 
 //--------Company----------

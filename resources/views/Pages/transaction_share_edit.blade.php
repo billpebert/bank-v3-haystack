@@ -3,10 +3,10 @@
 @section('content')
 
     <div class="container">
-        <div class="page-title">
-            <div class="title">Transactions</div>
-            <div class="subtitle">Share Transactions</div>
-        </div>
+        @component('components.page-title')
+            @slot('title', 'Transactions')
+            @slot('subtitle', 'Share Transactions')
+        @endcomponent
     </div>
 
 
@@ -15,15 +15,13 @@
             <div class="content">
                 <div class="row">
                     <div class="col-md-4 col-12 lg:p-40 lg:border-right">
-                        <div class="section-title">
-                            Edit Transactions
-                        </div>
-                        <div class="section-caption">
-                            Input your data transaction here
-                        </div>
+                        @component('components.section-header')
+                            @slot('title', 'Edit Transactions')
+                            @slot('caption', 'Input your data transaction here')
+                        @endcomponent
                         <hr>
                         <form class="needs-validation" novalidate id="formTransaction"
-                            action="{{ route('updateTransactionBank', request()->id) }}" method="POST">
+                            action="{{ route('updateTransactionBank', request()->id) }}">
                             @csrf
                             @method('PUT')
                             {{-- <input name="_token" type="hidden" value="{{ csrf_token() }}" /> --}}
@@ -67,12 +65,13 @@
                             </div>
                             <div class="form-group">
                                 <label for="detailsVar">Details</label>
-                                <input type="input" class="form-control" id="detailsVar" name="detailsVar">
+                                <input type="input" class="form-control" id="detailsVar" name="detailsVar"
+                                    value="{{ $data->Details }}">
                             </div>
                             <div class="form-group">
                                 <label for="segmentVar">Segment</label>
                                 <input type="input" class="form-control" id="segmentVar" name="segmentVar"
-                                    value="{{ $data->Details }}">
+                                    value="{{ $data->segment }}">
                             </div>
                             <div class="form-group">
                                 <label for="chequeVar">FX rate for £1</label>
@@ -142,60 +141,4 @@
             var as_xml = new bsn.AutoSuggest($this.attr("id"), options);
         });
     </script>
-    {{-- (function() {
-            'use strict';
-            window.addEventListener('load', function() {
-                var forms = document.getElementsByClassName('needs-validation');
-                var validation = Array.prototype.filter.call(forms, function(form) {
-                    form.addEventListener('submit', function(event) {
-                        if (form.checkValidity() === false) {
-                            event.preventDefault();
-                            event.stopPropagation();
-                        } else {
-                            event.preventDefault();
-                            var formData = $('#formTransaction').serialize();
-                            var url =
-                                "{{ action('MainController@updateTransactionShare') }}";
-                            var inputCashId = $('input#cashID').val();
-                            //console.log(inputCashId)
-                            $.ajax({
-                                type: "PUT",
-                                url: url,
-                                data: $('form').serialize(),
-                                success: function(msg) {
-                                    if (msg.status == 'success') {
-                                        location.reload();
-                                    } else if (msg.status == 'notFound') {
-                                        var url =
-                                            "{{ action('MainController@createCompany') }}";
-                                        $.ajax({
-                                            type: "POST",
-                                            url: url,
-                                            data: formData,
-                                            success: function(result) {
-                                                $('#createCompanyModal')
-                                                    .modal('show');
-                                                $("#modalContent").html(
-                                                    result)
-                                            },
-                                            error: function() {
-                                                alert(
-                                                    "failure when open modal"
-                                                );
-                                            }
-                                        });
-                                    } else {
-                                        alert(msg.message);
-                                    }
-                                },
-                                error: function() {
-                                    alert("failure");
-                                }
-                            });
-                        }
-                        form.classList.add('was-validated');
-                    }, false);
-                });
-            }, false);
-        })(); --}}
 @endpush

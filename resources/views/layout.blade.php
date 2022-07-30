@@ -15,6 +15,10 @@
 
 <body>
 
+    <div class="position-relative container-sm">
+        @include('components.toast')
+    </div>
+
     @include('components.navbar')
 
     @yield('content')

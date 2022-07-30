@@ -48,6 +48,7 @@ a:hover {
 //App Style
 @import 'components/navbar';
 @import 'components/buttons';
+@import 'components/toasts';
 
 @include media-breakpoint-up(lg) {
     .lg\: {

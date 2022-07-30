@@ -1,0 +1,33 @@
+.toast-container {
+    position: absolute;
+    right: 130px;
+    top: 204px;
+    z-index: 99;
+
+    @include media-breakpoint-down(lg) {
+        top: 50px;
+        right: 12px;
+    }
+}
+
+.toast {
+    border-radius: 8px;
+    padding: 24px;
+    border: none;
+    box-shadow: 0px 10px 20px rgba(31, 31, 31, 0.15);
+    flex-basis: content;
+    max-width: 425px;
+    font-size: 16px;
+
+    &.toast-success {
+        background-color: $green-st;
+
+        #__toast-message {
+            color: $white !important;
+        }
+    }
+
+    &:not(:last-child) {
+        margin-bottom: 0;
+    }
+}

@@ -3,10 +3,10 @@
 @section('content')
 
     <div class="container">
-        <div class="page-title">
-            <div class="title">Transactions</div>
-            <div class="subtitle">Share Transactions</div>
-        </div>
+        @component('components.page-title')
+            @slot('title', 'Transactions')
+            @slot('subtitle', 'Share Transactions')
+        @endcomponent
     </div>
 
 
@@ -15,12 +15,10 @@
             <div class="content">
                 <div class="row">
                     <div class="col-md-4 col-12 lg:p-40 lg:border-right">
-                        <div class="section-title">
-                            Add Transactions
-                        </div>
-                        <div class="section-caption">
-                            Input your data transaction here
-                        </div>
+                        @component('components.section-header')
+                            @slot('title', 'Add Transactions')
+                            @slot('caption', 'Input your data transaction here')
+                        @endcomponent
                         <hr>
                         <form class="needs-validation" novalidate id="formTransaction">
                             <input name="_token" type="hidden" value="{{ csrf_token() }}" />
@@ -133,6 +131,7 @@
         (function() {
             'use strict';
             window.addEventListener('load', function() {
+
                 var forms = document.getElementsByClassName('needs-validation');
                 var validation = Array.prototype.filter.call(forms, function(form) {
                     form.addEventListener('submit', function(event) {
@@ -144,14 +143,14 @@
                             var formData = $('#formTransaction').serialize();
                             var url =
                                 "{{ action('MainController@saveTransactionShare') }}";
-                            var inputCashId = $('input#cashID').val();
-                            console.log(inputCashId)
                             $.ajax({
-                                type: inputCashId.length != '' ? "PUT" : "POST",
+                                type: "POST",
                                 url: url,
                                 data: $('form').serialize(),
                                 success: function(msg) {
                                     if (msg.status == 'success') {
+                                        //Save response message to localStorage for toast.blade.php
+                                        localStorage.setItem("toast", msg.message)
                                         location.reload();
                                     } else if (msg.status == 'notFound') {
                                         var url =

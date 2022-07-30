@@ -435,7 +435,7 @@ class MainController extends Controller
                         )"
                 );
 
-                $result = ['status' => 'success', 'message' => 'Transaction created successfull'];
+                $result = ['status' => 'success', 'message' => 'Your data transaction has successfully added'];
             } catch (Trowable $e) {
                 $result = ['status' => 'error', 'message' => $e];
             }
@@ -457,26 +457,7 @@ class MainController extends Controller
      */
     public function updateTransactionShare(Request $request)
     {
-        //$getData = DB::table('cashbook1')->where('cashID', $request->cashID)->first();
-        $startDate = $request->startdate;
-        $finishDate = $request->finishdate;
-        $accounts = $request->accounts;
-        $data = $request->except(['_token', '_method', 'finishDateVar', 'startDateVar', 'bankShareVar', 'cashID', 'credDeb', 'fromVar']);
-        $tb['Date'] = $data['dateVar'];
-        $tb['Amount'] = $data['amountVar'];
-        $tb['transactiontime'] = $data['transactionTimeVar'];
-        // $tb['Amount'] = $data['fromVar'];
-        $tb['commission'] = $data['amountVar'] - $data['grossVar'];
-        $tb['Numbercredited'] = $data['numberVar'];
-        $tb['Numberdebited'] = $data['numberVar'];
-        $tb['Details'] = $data['detailsVar'];
-        $tb['segment'] = $data['segmentVar'];
-        $tb['fx'] = $data['fxVar'];
-        // $tb['Amount'] = $data['credDeb'];
-        //$tb['Amount'] = $data['accountVar'];
-        DB::table('cashbook1')->where('cashID', $request->cashID)->update($tb);
-        // dd($tb);
-        return redirect()->route('transaction');
+        //
     }
 
     /**
