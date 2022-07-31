@@ -142,7 +142,7 @@
         </div>
     </div>
 
-    @include('components.modal-create-company')
+    @include('components.modal-dialog')
 
 @endsection
 
@@ -244,7 +244,7 @@
                                             url: url,
                                             data: formData,
                                             success: function(result) {
-                                                $('#createAccountModal')
+                                                $('#finModalDialog__')
                                                     .modal('show');
                                                 $("#modalContent").html(
                                                     result)

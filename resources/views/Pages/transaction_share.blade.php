@@ -105,7 +105,7 @@
         </div>
 
         {{-- Modal --}}
-        @include('components.modal-create-company')
+        @include('components.modal-dialog')
     </div>
 
 
@@ -160,7 +160,7 @@
                                             url: url,
                                             data: formData,
                                             success: function(result) {
-                                                $('#createCompanyModal')
+                                                $('#finModalDialog__')
                                                     .modal('show');
                                                 $("#modalContent").html(
                                                     result)

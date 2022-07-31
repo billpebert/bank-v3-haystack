@@ -63,6 +63,7 @@
                 <th scope="col" width="30%">Payee/Payor</th>
             </tr>
             <tbody>
+                {{-- {{ dd($transactions) }} --}}
                 @foreach ($transactions as $key => $item)
                     <tr class="accordion-toggle collapsed" id="accordion1" data-toggle="collapse"
                         data-parent="#accordion1" href="#collapse{{ $key }}">
@@ -84,7 +85,7 @@
                         @endif
                         <td type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false"
                             aria-controls="collapseExample" class="d-flex align-items-center justify-content-between">
-                            {{ Str::limit($item->details, 18) }}
+                            {{ $accounts == $item->creditfk ? $item->debit : $item->credit }}
                             <img src="{{ asset('svgs/ic_arrow-dropdown.svg') }}" alt="">
                         </td>
                     </tr>
