@@ -7,7 +7,7 @@
     <title>@yield('title')</title>
 
     <link href="{{ asset('css/app.css') }}" rel="stylesheet" type="text/css">
-    <link rel="stylesheet" href="css/autosuggest_inquisitor.css" type="text/css" media="screen" charset="utf-8" />
+    <link rel="stylesheet" href="{{ asset('css/autosuggest_inquisitor.css') }}" type="text/css" />
 
     @stack('styles')
 

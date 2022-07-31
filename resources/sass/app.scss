@@ -9,13 +9,13 @@
 @import '~bootstrap/scss/bootstrap';
 
 * {
-    color: $black;
     box-sizing: border-box;
     font-family: 'Inter', sans-serif;
 }
 
 body {
     background-color: $white;
+    color: $black;
 }
 
 a,
@@ -157,3 +157,27 @@ a:hover {
 }
 
 @import 'components/transactions-table';
+
+form.needs-validation.transaction__ {
+    font-size: 12px !important;
+
+    .form-max-height {
+        max-height: 80vh;
+        overflow-y: auto;
+        margin-bottom: 24px;
+    }
+
+    label {
+        margin-bottom: 0;
+    }
+
+    .custom-radio.custom-control-inline {
+        label {
+            line-height: 26px;
+        }
+    }
+
+    .form-group {
+        margin-bottom: 0.5rem;
+    }
+}

@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\TransactionShareRequest;
 use Couchbase\View;
 use DB;
 use Illuminate\Http\Request;

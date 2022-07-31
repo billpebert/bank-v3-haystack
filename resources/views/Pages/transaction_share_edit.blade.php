@@ -11,19 +11,19 @@
 
 
     <div class="container-fluid content-page-wrapper pb-5">
-        <div class="container px-0">
-            <div class="content">
-                <div class="row">
-                    <div class="col-md-4 col-12 lg:p-40 lg:border-right">
-                        @component('components.section-header')
-                            @slot('title', 'Edit Transactions')
-                            @slot('caption', 'Input your data transaction here')
-                        @endcomponent
-                        <hr>
-                        <form class="needs-validation" novalidate id="formTransaction"
-                            action="{{ route('updateTransactionBank', request()->id) }}">
-                            @csrf
-                            @method('PUT')
+        <div class="content">
+            <div class="row">
+                <div class="col-md-4 col-12 lg:p-40 lg:border-right">
+                    @component('components.section-header')
+                        @slot('title', 'Edit Transactions')
+                        @slot('caption', 'Input your data transaction here')
+                    @endcomponent
+                    <hr>
+                    <form class="needs-validation transaction__" novalidate id="formTransaction"
+                        action="{{ route('updateTransactionBank', request()->id) }}">
+                        @csrf
+                        @method('PUT')
+                        <div class="form-max-height">
                             {{-- <input name="_token" type="hidden" value="{{ csrf_token() }}" /> --}}
                             <div class="form-group">
                                 <label for="dateVar">Date</label>
@@ -41,7 +41,8 @@
                                     name="fromVar" value="{{ $data->AccountName }}" data-entry="" data-account="" required>
                             </div>
                             <div class="form-group">
-                                <label for="amountVar" class="max-w-max">Net Amount (amount actually paid/received)</label>
+                                <label for="amountVar" class="max-w-max">Net Amount (amount actually
+                                    paid/received)</label>
                                 <input type="number" class="form-control" id="amountVar" name="amountVar" min="0"
                                     step="any" value="{{ $data->Amount }}" required>
                             </div>
@@ -97,23 +98,23 @@
                             <input name="accountVar" type="hidden" value="{{ $accounts }}" />
                             <input name="bankShareVar" type="hidden" value="{{ request()->get('bankshare') }}" />
                             <input name="cashID" id="cashID" value="{{ $data->cashID }}" type="hidden" />
-
-                            <div class="d-flex justify-content-end">
-                                <button type="submit" class="btn btn-primary">Submit</button>
-                            </div>
-                        </form>
-                    </div>
-                    <div class="col-md-8 col-12 lg:p-40">
-                        <div class="statistics d-flex">
-                            <x-card-balance-today account="{{ $accounts }}" />
                         </div>
 
-                        <x-transaction-share-list finishdate="{{ $finishDate }}" startdate="{{ $startDate }}"
-                            accounts="{{ $accounts }}" />
-
+                        <div class="d-flex justify-content-end">
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </div>
+                    </form>
+                </div>
+                <div class="col-md-8 col-12 lg:p-40">
+                    <div class="statistics d-flex">
+                        <x-card-balance-today account="{{ $accounts }}" />
                     </div>
 
+                    <x-transaction-share-list finishdate="{{ $finishDate }}" startdate="{{ $startDate }}"
+                        accounts="{{ $accounts }}" />
+
                 </div>
+
             </div>
         </div>
 

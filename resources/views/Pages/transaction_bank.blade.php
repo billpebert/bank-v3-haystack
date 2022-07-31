@@ -142,15 +142,11 @@
         </div>
     </div>
 
-    <div class="modal fade" id="createAccountModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content" id="modalContent">
+    @include('components.modal-create-company')
 
-            </div>
-        </div>
-    </div>
+@endsection
 
+@push('scripts')
     <script>
         var path = "{{ route('autosuggestion') }}";
         $(".autosuggestion").focus(function() {
@@ -237,6 +233,8 @@
                                 data: $('form').serialize(),
                                 success: function(msg) {
                                     if (msg.status == 'success') {
+                                        //Save response message to localStorage for toast.blade.php
+                                        localStorage.setItem("toast", msg.message)
                                         location.reload();
                                     } else if (msg.status == 'notFound') {
                                         var url =
@@ -261,7 +259,8 @@
                                         alert(msg.message);
                                     }
                                 },
-                                error: function() {
+                                error: function(e) {
+                                    console.log(e.responseText)
                                     alert("failure");
                                 }
                             });
@@ -272,4 +271,4 @@
             }, false);
         })();
     </script>
-@endsection
+@endpush

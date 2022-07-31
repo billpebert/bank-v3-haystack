@@ -1,4 +1,4 @@
-@extends('layout')
+@extends('views-duplicated.layout')
 @section('title', 'Transaction bank')
 @section('content')
     <div class="row">
@@ -28,8 +28,9 @@
                     <div class="col">
                         <div class="form-group">
                             <label for="amountVar">Amount</label>
-                            <input type="number" class="form-control autosuggestion" min="0" step="any" autocomplete="off"
-                                id="amountVar" name="amountVar" data-entry="Amount" data-account="AcBarclays" required>
+                            <input type="number" class="form-control autosuggestion" min="0" step="any"
+                                autocomplete="off" id="amountVar" name="amountVar" data-entry="Amount"
+                                data-account="AcBarclays" required>
                         </div>
                     </div>
                 </div>
@@ -37,7 +38,8 @@
                     <div class="col">
                         <div class="form-group">
                             <label for="catVar">Cat</label>
-                            <input type="number" class="form-control" id="catVar" name="catVar" min="0" step="any">
+                            <input type="number" class="form-control" id="catVar" name="catVar" min="0"
+                                step="any">
                         </div>
                     </div>
                     <div class="col">
@@ -64,13 +66,15 @@
                     <div class="col">
                         <div class="form-group">
                             <label for="chequeVar">Cheque No</label>
-                            <input type="number" class="form-control" id="chequeVar" name="chequeVar" min="0" step="any">
+                            <input type="number" class="form-control" id="chequeVar" name="chequeVar" min="0"
+                                step="any">
                         </div>
                     </div>
                     <div class="col">
                         <div class="form-group">
                             <label for="taxVar">Tax deducted at source (percent)</label>
-                            <input type="number" class="form-control" id="taxVar" name="taxVar" min="0" step="any">
+                            <input type="number" class="form-control" id="taxVar" name="taxVar" min="0"
+                                step="any">
                         </div>
                     </div>
                 </div>
@@ -83,8 +87,8 @@
                         <div class="col">
                             <div class="form-group">
                                 <label for="fxrate">FX rate</label>
-                                <input type="number" class="form-control" value="1" id="fxrate" name="fxrate" min="0"
-                                    step="any" required>
+                                <input type="number" class="form-control" value="1" id="fxrate" name="fxrate"
+                                    min="0" step="any" required>
                                 <input type="hidden" id="fxdetails" name="fxdetails"
                                     value="{{ $currency[0]->currency }}" />
                             </div>
@@ -105,11 +109,13 @@
 
                 <div class="form-group">
                     <div class="custom-control custom-radio custom-control-inline">
-                        <input type="radio" id="credit" value="debit" name="credDeb" class="custom-control-input">
+                        <input type="radio" id="credit" value="debit" name="credDeb"
+                            class="custom-control-input">
                         <label class="custom-control-label" for="debit">Credit</label>
                     </div>
                     <div class="custom-control custom-radio custom-control-inline">
-                        <input type="radio" id="debit" value="credit" name="credDeb" checked class="custom-control-input">
+                        <input type="radio" id="debit" value="credit" name="credDeb" checked
+                            class="custom-control-input">
                         <label class="custom-control-label" for="credit">Debit</label>
                     </div>
 

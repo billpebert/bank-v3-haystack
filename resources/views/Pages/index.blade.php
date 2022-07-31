@@ -47,6 +47,9 @@
             </div>
         </div>
     </div>
+@endsection
+
+@push('scripts')
     <script>
         (function() {
             'use strict';
@@ -64,4 +67,4 @@
             }, false);
         })();
     </script>
-@endsection
+@endpush
